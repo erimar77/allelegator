@@ -4,3 +4,6 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+
+# Claude Code per-user local settings (not shared)
+.claude/settings.local.json
