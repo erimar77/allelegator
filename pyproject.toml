@@ -1,0 +1,20 @@
+[project]
+name = "allelegator"
+version = "0.1.0"
+description = "AlleleGator: terminal allele aligner & visualizer"
+requires-python = ">=3.9"
+dependencies = ["rich>=13.0"]
+
+[project.scripts]
+gator = "allelgator.cli:main"
+allelegator = "allelgator.cli:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["allelgator*"]
+
+[tool.setuptools.package-data]
+allelgator = ["data/*.fasta"]
