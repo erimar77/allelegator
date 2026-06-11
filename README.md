@@ -111,6 +111,7 @@ INPUTS                Zero or more FASTA file paths and/or NCBI accession IDs
   --start N           First residue/base number shown on the ruler (default 1).
   --width N           Columns per wrapped block (default 60).
   --no-color          Disable color (for piping or plain terminals).
+  --version           Show version and exit.
   -h, --help          Show help.
 ```
 
@@ -142,6 +143,34 @@ See `examples/ecoli_gad.fasta`.
 ```bash
 man -l man/allelegator.1
 ```
+
+## Citing AlleleGator
+
+If you use AlleleGator in published or shared work, please include the following
+acknowledgement:
+
+> Sequence alignments were produced with AlleleGator v0.1.0 (Martin, 2026),
+> https://github.com/erimar77/allelegator.
+
+and cite it as:
+
+> Martin, E. (2026). *AlleleGator: a terminal allele aligner and visualizer*
+> (Version 0.1.0) [Computer software]. https://github.com/erimar77/allelegator
+
+BibTeX:
+
+```bibtex
+@software{allelegator2026,
+  author  = {Martin, Eric},
+  title   = {{AlleleGator: a terminal allele aligner and visualizer}},
+  year    = {2026},
+  version = {0.1.0},
+  url     = {https://github.com/erimar77/allelegator}
+}
+```
+
+Please note the version you used (run `allelegator --version`) so the exact
+analysis can be reproduced.
 
 ## License
 

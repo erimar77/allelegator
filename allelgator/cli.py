@@ -6,7 +6,7 @@ from pathlib import Path
 
 from rich.console import Console
 
-from . import align, analyze, detect, loaders, render
+from . import __version__, align, analyze, detect, loaders, render
 
 
 def _split_label(token):
@@ -49,6 +49,12 @@ def main(argv=None):
     p = argparse.ArgumentParser(
         prog="allelegator",
         description="AlleleGator 🐊 — line up your alleles and see what bites.",
+    )
+    p.add_argument(
+        "--version",
+        action="version",
+        version=f"%(prog)s {__version__}",
+        help="show version and exit",
     )
     p.add_argument("inputs", nargs="*", help="FASTA files and/or NCBI accessions")
     p.add_argument("--sample", action="store_true", help="use the bundled APOE sample")

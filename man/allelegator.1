@@ -74,6 +74,9 @@ Number of alignment columns per wrapped block. Default is 60.
 .B \-\-no\-color
 Disable ANSI color, for piping output or plain terminals.
 .TP
+.B \-\-version
+Show the version number and exit.
+.TP
 .B \-h ", " \-\-help
 Show a help message and exit.
 .SH OUTPUT
@@ -146,6 +149,25 @@ An example nucleotide alignment (E. coli gadA/gadB) validated against T-COFFEE.
 .I examples/ecoli_evgs.fasta
 An example protein alignment (E. coli EvgS sensor kinase across 10 strains) for
 the dot-identity view.
+.SH CITING ALLELEGATOR
+If you use AlleleGator in published or shared work, please include the
+following acknowledgement:
+.PP
+.RS
+Sequence alignments were produced with AlleleGator v0.1.0 (Martin, 2026),
+https://github.com/erimar77/allelegator.
+.RE
+.PP
+and cite it as:
+.PP
+.RS
+Martin, E. (2026). AlleleGator: a terminal allele aligner and visualizer
+(Version 0.1.0) [Computer software]. https://github.com/erimar77/allelegator
+.RE
+.PP
+Please note the version you used (run
+.B allelegator \-\-version )
+so the exact analysis can be reproduced.
 .SH SEE ALSO
 T-COFFEE(1), muscle(1), mafft(1)
 .SH AUTHOR
