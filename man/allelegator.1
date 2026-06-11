@@ -1,14 +1,15 @@
-.TH GATOR 1 "2026-06-11" "AlleleGator 0.1.0" "User Commands"
+.TH ALLELEGATOR 1 "2026-06-11" "AlleleGator 0.1.0" "User Commands"
 .SH NAME
-gator \- AlleleGator: terminal allele aligner and visualizer
+allelegator \- AlleleGator: terminal allele aligner and visualizer
 .SH SYNOPSIS
-.B gator
-.RI [ INPUTS .\|.\|.]
-.RI [ options ]
-.br
 .B allelegator
 .RI [ INPUTS .\|.\|.]
 .RI [ options ]
+.PP
+.B gator
+is a shorter alias for
+.BR allelegator ;
+the two commands are identical.
 .SH DESCRIPTION
 .B AlleleGator
 aligns multiple allele sequences of a single gene and renders the alignment in
@@ -121,19 +122,19 @@ was not used.
 .SH EXAMPLES
 .TP
 Render the bundled APOE alleles:
-.B gator \-\-sample
+.B allelegator \-\-sample
 .TP
 Show only what differs:
-.B gator \-\-sample \-\-diff
+.B allelegator \-\-sample \-\-diff
 .TP
 Align local FASTA files:
-.B gator a.fasta b.fasta c.fasta
+.B allelegator a.fasta b.fasta c.fasta
 .TP
 Fetch two protein records from NCBI and align them:
-.B gator NP_000032.1 NP_000041.1
+.B allelegator NP_000032.1 NP_000041.1
 .TP
 Compare EvgS across E. coli strains as a dot-identity view:
-.B gator NP_416871.1 WPV06440.1 AAN81356.1 \-\-ref NP_416871.1
+.B allelegator NP_416871.1=MG1655 WPV06440.1=O157 \-\-ref MG1655
 .SH FILES
 .TP
 .I allelgator/data/apoe_alleles.fasta

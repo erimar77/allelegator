@@ -47,7 +47,7 @@ def _gather(args):
 
 def main(argv=None):
     p = argparse.ArgumentParser(
-        prog="gator",
+        prog="allelegator",
         description="AlleleGator 🐊 — line up your alleles and see what bites.",
     )
     p.add_argument("inputs", nargs="*", help="FASTA files and/or NCBI accessions")

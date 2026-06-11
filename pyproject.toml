@@ -6,8 +6,8 @@ requires-python = ">=3.9"
 dependencies = ["rich>=13.0"]
 
 [project.scripts]
-gator = "allelgator.cli:main"
 allelegator = "allelgator.cli:main"
+gator = "allelgator.cli:main"
 
 [build-system]
 requires = ["setuptools>=61"]

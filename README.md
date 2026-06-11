@@ -19,29 +19,29 @@ python -m venv .venv
 .venv/bin/pip install -e .
 ```
 
-This puts two console commands on your PATH (inside the venv): `gator` and its
-alias `allelegator`.
+This puts the command `allelegator` on your PATH (inside the venv), plus a
+shorter alias `gator` — the two are identical.
 
 ## Quick start
 
 ```bash
 # Bundled demo: the three APOE alleles (ε2/ε3/ε4)
-gator --sample
+allelegator --sample
 
 # The "just tell me what differs" view
-gator --sample --diff
+allelegator --sample --diff
 
 # Your own sequences
-gator alleles.fasta
-gator seq_a.fasta seq_b.fasta seq_c.fasta
+allelegator alleles.fasta
+allelegator seq_a.fasta seq_b.fasta seq_c.fasta
 
 # Pull straight from NCBI by accession (the way the data is shared)
-gator NP_000032.1 NP_000041.1
+allelegator NP_000032.1 NP_000041.1
 
 # Strain comparison: EvgS sensor kinase across E. coli strains, dot-identity
 # view against the K-12 (MG1655) reference, fetched live from NCBI.
 # Use SOURCE=Label to give each accession a friendly name.
-gator NP_416871.1=MG1655 WPV06440.1=O157 AAN81356.1=CFT073 \
+allelegator NP_416871.1=MG1655 WPV06440.1=O157 AAN81356.1=CFT073 \
       --ref MG1655
 ```
 
@@ -96,7 +96,7 @@ Alignment length: 299   Identical columns: 99.3%   Variant columns: 2
 ## Usage
 
 ```
-gator [INPUTS...] [options]
+allelegator [INPUTS...] [options]
 
 INPUTS                Zero or more FASTA file paths and/or NCBI accession IDs
                       (mixed is fine). Anything that exists as a file is read as
@@ -140,7 +140,7 @@ See `examples/ecoli_gad.fasta`.
 ## Man page
 
 ```bash
-man -l man/gator.1
+man -l man/allelegator.1
 ```
 
 ## License
