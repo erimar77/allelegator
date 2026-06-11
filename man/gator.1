@@ -1,0 +1,124 @@
+.TH GATOR 1 "2026-06-11" "AlleleGator 0.1.0" "User Commands"
+.SH NAME
+gator \- AlleleGator: terminal allele aligner and visualizer
+.SH SYNOPSIS
+.B gator
+.RI [ INPUTS .\|.\|.]
+.RI [ options ]
+.br
+.B allelegator
+.RI [ INPUTS .\|.\|.]
+.RI [ options ]
+.SH DESCRIPTION
+.B AlleleGator
+aligns multiple allele sequences of a single gene and renders the alignment in
+the terminal so the columns that differ stand out. Input sequences may come from
+local FASTA files, NCBI accession IDs fetched over the network, or the bundled
+APOE sample. Protein and nucleotide sequences are supported and auto-detected;
+mixing the two in one run is an error.
+.PP
+A handful of allele sequences is often only a few hundred bytes of text, yet
+impossible to compare by eye in its raw form. AlleleGator produces either a full
+colored alignment with a consensus row, or a compact view listing only the
+variant columns.
+.SH ARGUMENTS
+.TP
+.I INPUTS
+Zero or more FASTA file paths and/or NCBI accession IDs, mixed freely. A token
+that exists as a file is parsed as FASTA; any other token is treated as an
+accession and fetched from NCBI.
+.SH OPTIONS
+.TP
+.B \-\-sample
+Use the bundled APOE allele sample (\(*e2/\(*e3/\(*e4). Ignores
+.IR INPUTS .
+.TP
+.B \-\-diff
+Show the compact variant-only view: a summary line plus a table of just the
+columns where the alleles disagree.
+.TP
+.BI \-\-fetch " ID " [ID .\|.\|.]
+Explicitly fetch these accession IDs from NCBI E-utilities.
+.TP
+.BI \-\-db " DB"
+Force the NCBI database to query
+.RB ( protein
+or
+.BR nuccore );
+otherwise it is guessed from the accession prefix.
+.TP
+.BI \-\-start " N"
+First residue or base number shown on the ruler. Default is 1. Use this to match
+an external numbering scheme (for example
+.B \-\-start 87
+for a trimmed protein region).
+.TP
+.BI \-\-width " N"
+Number of alignment columns per wrapped block. Default is 60.
+.TP
+.B \-\-no\-color
+Disable ANSI color, for piping output or plain terminals.
+.TP
+.B \-h ", " \-\-help
+Show a help message and exit.
+.SH OUTPUT
+In the default
+.B full
+view, the alignment is shown in wrapped blocks. Each block has a numbered ruler,
+one row per allele, and a
+.B cons
+row that marks fully-conserved columns with an asterisk
+.RB ( * ).
+Columns where the alleles disagree are shown in bold red across every row.
+.PP
+In the
+.B \-\-diff
+view, a one-line summary (alignment length, percent identical columns, number of
+variant columns) is followed by a table with one row per variant column, giving
+the position and the residue each allele carries there.
+.SH ALIGNMENT METHOD
+AlleleGator builds a center-star multiple sequence alignment. It selects the
+sequence with the highest summed pairwise similarity as the center, aligns every
+other sequence to it with Needleman\-Wunsch global alignment, and merges induced
+gaps so that columns remain consistent. The gap penalty is set harsher than a
+mismatch so that near-identical, equal-length alleles align by substitution
+rather than introducing spurious gaps. This targets the common case of alleles
+of one gene; it is not intended to replace tools such as MUSCLE or MAFFT on
+highly divergent sequences.
+.SH EXIT STATUS
+.TP
+.B 0
+Success.
+.TP
+.B 1
+A load error (bad FASTA, failed NCBI fetch), fewer than two sequences, or mixed
+protein/nucleotide input.
+.TP
+.B 2
+No inputs were given and
+.B \-\-sample
+was not used.
+.SH EXAMPLES
+.TP
+Render the bundled APOE alleles:
+.B gator \-\-sample
+.TP
+Show only what differs:
+.B gator \-\-sample \-\-diff
+.TP
+Align local FASTA files:
+.B gator a.fasta b.fasta c.fasta
+.TP
+Fetch two protein records from NCBI and align them:
+.B gator NP_000032.1 NP_000041.1
+.SH FILES
+.TP
+.I allelgator/data/apoe_alleles.fasta
+The bundled APOE allele sample.
+.TP
+.I examples/ecoli_gad.fasta
+An example nucleotide alignment (E. coli gadA/gadB) validated against T-COFFEE.
+.SH SEE ALSO
+T-COFFEE(1), muscle(1), mafft(1)
+.SH AUTHOR
+Built with AlleleGator.
