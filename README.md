@@ -37,7 +37,16 @@ gator seq_a.fasta seq_b.fasta seq_c.fasta
 
 # Pull straight from NCBI by accession (the way the data is shared)
 gator NP_000032.1 NP_000041.1
+
+# Strain comparison: EvgS sensor kinase across E. coli strains, dot-identity
+# view against the K-12 (MG1655) reference, fetched live from NCBI
+gator NP_416871.1 WPV06440.1 CAS10111.1 AAN81356.1 ABE08168.1 CBJ01993.1 \
+      --ref NP_416871.1
 ```
+
+The protein vs. nucleotide database is guessed from each accession (with the
+other database tried as a fallback), so a mix of RefSeq and GenBank protein IDs
+just works.
 
 ## What the output looks like
 
@@ -51,6 +60,21 @@ e3   RALMDETMKELKAYKSELEEQLTPVAEETRARLSKELQAAQARLGADMEDVCGRLVQYRG
 e2   RALMDETMKELKAYKSELEEQLTPVAEETRARLSKELQAAQARLGADMEDVCGRLVQYRG
 e4   RALMDETMKELKAYKSELEEQLTPVAEETRARLSKELQAAQARLGADMEDVRGRLVQYRG
 cons *************************************************** ********
+```
+
+**Reference / dot-identity view** (`--ref [NAME]`): one reference sequence (the
+top row, or the one you name) is shown in full; every other row shows a `.`
+where it matches the reference and the actual residue only where it differs.
+This is the "inverted" style common in strain-comparison figures — blanks mean
+"same," letters mean "changed."
+
+```
+            1                                                         60
+NP_416871.1 MKFLPYIFLLCCGLWSTISFADEDYIEYRGISSNNRVTLDPLRLSNKELRWLASKKNLVI
+WPV06440.1  ......................G.....................................
+AAN81356.1  ...........X..........G.....H...............................
+CBJ01993.1  ............A....M..........................................
+cons        ***********..****.****.*****.*******************************
 ```
 
 **Diff view** (`--diff`): a one-line summary plus a table of just the variant
@@ -75,6 +99,8 @@ INPUTS                Zero or more FASTA file paths and/or NCBI accession IDs
 
   --sample            Use the bundled APOE allele sample (ignores INPUTS).
   --diff              Show the compact variant-only view.
+  --ref [NAME]        Dot-identity view against a reference (default: first
+                      sequence). Matches show as `.`, differences as the residue.
   --fetch ID [ID...]  Explicitly fetch these accessions from NCBI.
   --db DB             Force the NCBI database (protein | nuccore).
   --start N           First residue/base number shown on the ruler (default 1).

@@ -1,6 +1,6 @@
 from rich.console import Console
 
-from allelgator.render import render_diff, render_full
+from allelgator.render import render_diff, render_full, render_reference
 
 
 def _plain(renderable):
@@ -31,6 +31,19 @@ def test_full_view_wraps_blocks():
     aligned = ["A" * 200, "A" * 200]
     out = _plain(render_full(names, aligned, variant_cols=[], start=1, width=50))
     assert out.count("\n") > 4
+
+
+def test_reference_view_dots_for_matches():
+    names = ["MG", "A", "B"]
+    aligned = ["ACGTACGT", "ACGTTCGT", "ACGAACGT"]
+    out = _plain(render_reference(names, aligned, variant_cols=[3, 4], ref_index=0))
+    rows = [ln for ln in out.splitlines() if ln.strip()]
+    # Reference row keeps its full sequence.
+    assert any(ln.startswith("MG") and "ACGTACGT" in ln for ln in rows)
+    # Non-reference rows show dots for matches and the differing letter.
+    a_row = next(ln for ln in rows if ln.startswith("A "))
+    assert "." in a_row and "T" in a_row  # match dots + the differing T at col 4
+    assert "ACGTTCGT" not in a_row        # not shown verbatim
 
 
 def test_diff_view_lists_variant_positions():

@@ -37,6 +37,14 @@ Use the bundled APOE allele sample (\(*e2/\(*e3/\(*e4). Ignores
 Show the compact variant-only view: a summary line plus a table of just the
 columns where the alleles disagree.
 .TP
+.BI \-\-ref " [NAME]"
+Show the dot-identity view. One reference sequence is printed in full as the top
+row; every other row shows a dot
+.RB ( . )
+where it matches the reference and the differing residue otherwise. With no
+.IR NAME ,
+the first input sequence is the reference; otherwise the named sequence is used.
+.TP
 .BI \-\-fetch " ID " [ID .\|.\|.]
 Explicitly fetch these accession IDs from NCBI E-utilities.
 .TP
@@ -76,6 +84,12 @@ In the
 view, a one-line summary (alignment length, percent identical columns, number of
 variant columns) is followed by a table with one row per variant column, giving
 the position and the residue each allele carries there.
+.PP
+In the
+.B \-\-ref
+view, the reference row is shown in full and the other rows are reduced to dots
+at every position that matches the reference, so only the differences carry a
+visible letter.
 .SH ALIGNMENT METHOD
 AlleleGator builds a center-star multiple sequence alignment. It selects the
 sequence with the highest summed pairwise similarity as the center, aligns every
@@ -111,6 +125,9 @@ Align local FASTA files:
 .TP
 Fetch two protein records from NCBI and align them:
 .B gator NP_000032.1 NP_000041.1
+.TP
+Compare EvgS across E. coli strains as a dot-identity view:
+.B gator NP_416871.1 WPV06440.1 AAN81356.1 \-\-ref NP_416871.1
 .SH FILES
 .TP
 .I allelgator/data/apoe_alleles.fasta
@@ -118,6 +135,10 @@ The bundled APOE allele sample.
 .TP
 .I examples/ecoli_gad.fasta
 An example nucleotide alignment (E. coli gadA/gadB) validated against T-COFFEE.
+.TP
+.I examples/ecoli_evgs.fasta
+An example protein alignment (E. coli EvgS sensor kinase across 10 strains) for
+the dot-identity view.
 .SH SEE ALSO
 T-COFFEE(1), muscle(1), mafft(1)
 .SH AUTHOR

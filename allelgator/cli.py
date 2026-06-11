@@ -30,6 +30,14 @@ def main(argv=None):
     p.add_argument("inputs", nargs="*", help="FASTA files and/or NCBI accessions")
     p.add_argument("--sample", action="store_true", help="use the bundled APOE sample")
     p.add_argument("--diff", action="store_true", help="show compact variant-only view")
+    p.add_argument(
+        "--ref",
+        nargs="?",
+        const="",
+        default=None,
+        metavar="NAME",
+        help="dot-identity view against a reference (default: first sequence)",
+    )
     p.add_argument("--fetch", nargs="+", help="explicitly fetch these NCBI accessions")
     p.add_argument("--db", help="force NCBI db (protein|nuccore)")
     p.add_argument("--start", type=int, default=1, help="first residue number for the ruler")
@@ -66,6 +74,18 @@ def main(argv=None):
 
     if args.diff:
         console.print(render.render_diff(names, aligned, variant, start=args.start))
+    elif args.ref is not None:
+        ref_name = args.ref or names[0]
+        if ref_name not in names:
+            console.print(
+                f"[red]error:[/] reference '{ref_name}' not found. "
+                f"Available: {', '.join(names)}"
+            )
+            return 1
+        console.print(render.render_reference(
+            names, aligned, variant, ref_index=names.index(ref_name),
+            start=args.start, width=args.width,
+        ))
     else:
         console.print(render.render_full(names, aligned, variant, start=args.start, width=args.width))
     return 0

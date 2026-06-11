@@ -54,6 +54,32 @@ def test_fetch_ncbi_parses_fasta(monkeypatch):
     assert seq == "HLRKLRKR"
 
 
+def test_guess_db():
+    from allelgator.loaders import _guess_db
+
+    assert _guess_db("NP_416871.1") == "protein"
+    assert _guess_db("WPV06440.1") == "protein"   # 3-letter GenBank protein
+    assert _guess_db("AAN81356.1") == "protein"
+    assert _guess_db("NM_000041.3") == "nuccore"
+    assert _guess_db("U00096.3") == "nuccore"      # 1-letter GenBank nucleotide
+
+
+def test_fetch_ncbi_falls_back_to_other_db(monkeypatch):
+    # First db (guessed) 400s; fallback db succeeds.
+    calls = []
+
+    def fake_efetch(accession, db):
+        calls.append(db)
+        if db == calls[0]:
+            raise OSError("HTTP Error 400")
+        return ">x\nMKLV\n"
+
+    monkeypatch.setattr(loaders, "_efetch", fake_efetch)
+    name, seq = fetch_ncbi("X12345.1")
+    assert seq == "MKLV"
+    assert len(calls) == 2  # tried primary then fallback
+
+
 def test_fetch_ncbi_network_error(monkeypatch):
     def boom(url, timeout=0):
         raise OSError("no network")

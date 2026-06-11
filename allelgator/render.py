@@ -67,6 +67,50 @@ def render_full(names, aligned, variant_cols, start=1, width=None,
     return Group(*lines)
 
 
+def render_reference(names, aligned, variant_cols, ref_index=0, start=1,
+                     width=None, show_consensus=True):
+    """Dot-identity view: one reference row shown in full; every other row shows
+    `.` where it matches the reference and the differing residue otherwise.
+
+    The consensus row marks fully-conserved columns with `*` and the rest with
+    `.` (the convention used by published dot-identity alignments).
+    """
+    total = len(aligned[0]) if aligned else 0
+    block = width or 60
+    lbl, label = _labeler(names)
+    ref = aligned[ref_index] if aligned else ""
+    cons = ("".join("*" if len(set(col)) == 1 else "." for col in zip(*aligned))
+            if aligned else "")
+
+    lines = []
+    for off in range(0, total, block):
+        cols = list(range(off, min(off + block, total)))
+        left = str(start + off)
+        right = str(start + cols[-1])
+        ruler = Text(" " * lbl + left, style="bold cyan")
+        pad = (lbl + len(cols)) - len(ruler.plain) - len(right)
+        ruler.append(" " * max(1, pad) + right, style="bold cyan")
+        lines.append(ruler)
+        for idx, (name, seq) in enumerate(zip(names, aligned)):
+            row = Text(label(name), style="bold")
+            for c in cols:
+                ch = seq[c]
+                if idx == ref_index:
+                    row.append(ch, style="dim" if ch == "-" else "")
+                elif ch == ref[c]:
+                    row.append(".", style="dim")
+                else:
+                    row.append(ch, style="bold red")
+            lines.append(row)
+        if show_consensus:
+            crow = Text(label("cons"), style="dim")
+            for c in cols:
+                crow.append(cons[c], style="green" if cons[c] == "*" else "dim")
+            lines.append(crow)
+        lines.append(Text(""))
+    return Group(*lines)
+
+
 def render_diff(names, aligned, variant_cols, start=1):
     """Compact view: a summary line plus one table row per variant column."""
     total = len(aligned[0]) if aligned else 0
