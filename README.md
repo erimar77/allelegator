@@ -39,10 +39,15 @@ gator seq_a.fasta seq_b.fasta seq_c.fasta
 gator NP_000032.1 NP_000041.1
 
 # Strain comparison: EvgS sensor kinase across E. coli strains, dot-identity
-# view against the K-12 (MG1655) reference, fetched live from NCBI
-gator NP_416871.1 WPV06440.1 CAS10111.1 AAN81356.1 ABE08168.1 CBJ01993.1 \
-      --ref NP_416871.1
+# view against the K-12 (MG1655) reference, fetched live from NCBI.
+# Use SOURCE=Label to give each accession a friendly name.
+gator NP_416871.1=MG1655 WPV06440.1=O157 AAN81356.1=CFT073 \
+      --ref MG1655
 ```
+
+Any input — a file path or an accession — may carry a friendly name as
+`SOURCE=Label` (e.g. `NP_416871.1=MG1655`). The label is what shows up in the
+alignment and what you pass to `--ref`.
 
 The protein vs. nucleotide database is guessed from each accession (with the
 other database tried as a fallback), so a mix of RefSeq and GenBank protein IDs

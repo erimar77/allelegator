@@ -26,7 +26,13 @@ variant columns.
 .I INPUTS
 Zero or more FASTA file paths and/or NCBI accession IDs, mixed freely. A token
 that exists as a file is parsed as FASTA; any other token is treated as an
-accession and fetched from NCBI.
+accession and fetched from NCBI. Any token may carry a friendly name in the form
+.IR SOURCE = Label
+(for example
+.BR NP_416871.1=MG1655 );
+the label is shown in the alignment and is the name to pass to
+.BR \-\-ref .
+If a labelled file holds several records, the label is suffixed with an index.
 .SH OPTIONS
 .TP
 .B \-\-sample

@@ -9,16 +9,39 @@ from rich.console import Console
 from . import align, analyze, detect, loaders, render
 
 
+def _split_label(token):
+    """Split an `ID=Label` token into (source, label); label is None if absent."""
+    if "=" in token:
+        source, label = token.split("=", 1)
+        return source, label
+    return token, None
+
+
+def _relabel(records, label):
+    """Apply a friendly label to loaded records (suffixing if there are several)."""
+    if label is None:
+        return records
+    if len(records) == 1:
+        return [(label, records[0][1])]
+    return [(f"{label}{i + 1}", seq) for i, (_, seq) in enumerate(records)]
+
+
 def _gather(args):
-    """Return a list of (name, seq). Raises loaders.LoaderError on failure."""
+    """Return a list of (name, seq). Raises loaders.LoaderError on failure.
+
+    Any input token may carry a friendly name as `SOURCE=Label`, e.g.
+    `NP_416871.1=MG1655` or `alleles.fasta=MyGene`.
+    """
     if args.sample:
         return loaders.load_sample()
     records = []
     for token in args.inputs + (args.fetch or []):
-        if Path(token).exists():
-            records.extend(loaders.parse_fasta(Path(token).read_text()))
+        source, label = _split_label(token)
+        if Path(source).exists():
+            recs = loaders.parse_fasta(Path(source).read_text())
         else:
-            records.append(loaders.fetch_ncbi(token, db=args.db))
+            recs = [loaders.fetch_ncbi(source, db=args.db)]
+        records.extend(_relabel(recs, label))
     return records
 
 
